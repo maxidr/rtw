@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+		<title>Exhibidor</title>
+		<script src="js/faye-browser-min.js" type="text/javascript" language="javascript" charset="utf-8" ></script>
+		<script src="js/jquery-1.4.2.min.js" type="text/javascript" language="javascript" charset="utf-8" ></script>
+		<script type="text/javascript" language="ejavascript" charset="utf-8">
+		// <![CDATA[
+			$(document).ready(function(){	
+				var client = new Faye.Client('http://10.86.37.195:8000/');
+				
+				function publish(msg){
+					
+					client.publish($("#router").val(), {
+						text: msg
+					});
+				}
+				
+				$("#btn_publicar").click(function(event){
+					event.preventDefault();
+					publish($("#msg").val());
+					$("#msg").val("");
+				});
+				
+			});
+		// ]]>
+		</script>
+	</head>
+	<body>
+		<h1>Publicador</h1>
+		<input type="text" name="msg" value="" id="msg" />
+		En:
+		<select name="router" id="router">
+			<option value="/exhibidor/001">Exhibidor 001</option>
+			<option value="/exhibidor/002">Exhibidor 002</option>
+			<option value="/exhibidor/003">Exhibidor 003</option>			
+		</select>		
+		<input type="button" name="Publicar" value="Publicar" id="btn_publicar" />
+	</body>
+</html>
