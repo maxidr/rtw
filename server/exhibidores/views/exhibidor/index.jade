@@ -1,0 +1,42 @@
+script(src="/javascripts/jquery-1.4.2.min.js", type="text/javascript", language="javascript", charset="utf-8")
+script(src="/javascripts/faye-browser-min.js", type="text/javascript", language="javascript", charset="utf-8")
+
+h1 #{title}
+
+| Subscripción:		
+select#router(name="router")
+	option(value="/exhibidor/001")
+		| Exhibidor 001
+	option(value="/exhibidor/002")
+		| Exhibidor 002
+	option(value="/exhibidor/003")
+		| Exhibidor 003
+
+#msg
+
+:javascript
+	|	$(document).ready(function(){	
+	|		var client = new Faye.Client(location.host + "#{faye_mount}");
+	|		var subscription = null;
+	|		
+	|		subscribir();
+	|		
+	|		function subscribir(channel){
+	|			if( subscription != null ){
+	|				subscription.cancel();					
+	|			}
+	|			if( channel == "" || channel  == undefined ){
+	|				channel = $("#router").val();
+	|			}
+	|			subscription = client.subscribe(channel, function(message) {
+	|				$("#msg").html(message.text);
+	|			});
+	|		}				
+	|		
+	|		$("#router").change(function(){
+	|			subscribir($(this).val());
+	|		});				
+	|	});		
+
+
+

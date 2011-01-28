@@ -1,0 +1,41 @@
+script(src="/javascripts/jquery-1.4.2.min.js", type="text/javascript", language="javascript", charset="utf-8")
+script(src="/javascripts/faye-browser-min.js", type="text/javascript", language="javascript", charset="utf-8")
+
+h1 #{title}
+
+p Enviar:
+
+input(type="text", name="msg", value="", id="msg")
+En:
+select(name="router", id="router")
+	option(value="/exhibidor/001")
+		| Exhibidor 001
+	option(value="/exhibidor/002")
+		| Exhibidor 002
+	option(value="/exhibidor/003")
+		| Exhibidor 003
+
+input(type="button", name="Publicar", value="Publicar", id="btn_publicar")
+
+:javascript
+  | $(document).ready(function(){	
+  |   var host = location.host + "#{faye_mount}";
+	|		var client = new Faye.Client(host);
+	|	
+	|		function publish(msg){	|		
+	|			client.publish($("#router").val(), {
+	|				text: msg
+	|			});
+	|		}
+	|	
+	|		$("#btn_publicar").click(function(event){
+	|			event.preventDefault();
+	|			publish($("#msg").val());
+	|			$("#msg").val("");
+	|		});
+	|	
+	| });
+	
+
+
+

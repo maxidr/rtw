@@ -1,0 +1,10 @@
+{
+  "name":"exhibidores",
+  "version":"0.0.1",
+  "dependencies":{
+    "express":"1.0.3",
+    "ejs":"",
+    "jade":"",
+    "faye":"",
+  }
+}
