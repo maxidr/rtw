@@ -9,10 +9,10 @@ var app = module.exports = express.createServer();
 
 // Configuration
 
-var port = 3000;
+var port = module.service_port = 3000;
 
 app.configure(function(){
-  app.set('views', __dirname + '/views');
+  app.set('views', __dirname + '/app/views');
   app.set('view engine', 'jade');
   app.use(express.bodyDecoder());
   app.use(express.methodOverride());
@@ -21,48 +21,28 @@ app.configure(function(){
 });
 
 app.configure('development', function(){
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
 
 app.configure('production', function(){
-  app.use(express.errorHandler()); 
+  app.use(express.errorHandler());
 });
 
-// Faye (PUB/SUB)
-var faye = require('faye');
-var faye_mount_name = "/subscription";
-var faye_service = new faye.NodeAdapter({
-	mount: faye_mount_name,
-	timeout: 45
-});
-
-var faye_client = new faye.Client("http://localhost:" + port + faye_mount_name);
-
-faye_service.attach(app);
+var broadcast_service = require('./broadcast').start_service();
 
 // Routes
 
 app.get('/', function(req, res){
   res.render('index', {
     locals: {
-      title: 'Express'
+      title: 'Servidor de exhibidores'
     }
   });
 });
 
-// Pantallas para testeo de publicación y exhibición.
-
-app.get('/publicador',function(req,res){
-	res.render('publicador/index', {
-		locals: { title: 'Publicador', faye_mount: faye_mount_name }
-	});
-});
-
-app.get('/exhibidor', function(req, res){
-	res.render('exhibidor/index', {
-		locals: { title: 'Exhibidor', faye_mount: faye_mount_name }
-	});
-});
+require('./app/routes/tester');
+require('./app/routes/plantillas');
+require('./app/routes/exhibidores');
 
 // Only listen on $ node app.js
 
@@ -70,3 +50,4 @@ if (!module.parent) {
   app.listen(port);
   console.log("Express server listening on port %d", app.address().port)
 }
+

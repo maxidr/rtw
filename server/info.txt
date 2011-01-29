@@ -1,39 +1,40 @@
 Plantillas:
 - Nueva: Dar de alta una plantilla
   POST     /plantillas
-  Parámetros: 
+  Parámetros:
   	- idTemplate
   	- template
   Respuesta: (content-type: text/plain)
   	- OK
   	- ERROR
-  	
-- Mostrar: Retorna el contenido de una plantilla específica 
+
+- Mostrar: Retorna el contenido de una plantilla específica
 	GET        /plantillas/{idTemplate}
 	Parámetros:
-		- idTemplate                     
+		- idTemplate
 
 Exhibidores:
 - Load: Retorna el template a mostrar en el exhibidor que realiza el requerimiento.
-                GET        /
-                Parámetros:
-                               - id: Id del exhibidor solicitante
-                Respuesta: Retorna el html que el exhibidor debe mostrar (content-type: text/html) 
-                               
+	GET        /
+  Parámetros:
+  - id: Id del exhibidor solicitante
+  Respuesta: Retorna el html que el exhibidor debe mostrar (content-type: text/html)
+
 - Cambiar plantilla:
-                POST     /exhibidores/plantilla
-                Parámetros:
-                               - idTemplate: Identificador del nuevo template a utilizar
-                               - canal: Canal donde se renovarán las plantillas. 
-                                                                Todos los exhibidores subscriptos a dicho canal recargarán a la nueva plantilla
-- broadcast: Se envía un mensaje a publicar en un canal determinado. La información enviada es un array (JS) con la 
-                                               información necesaria requerida por el template en cuestión. 
-                                               Ej.: 
-                                                               [data: { 'nro': '2', 'puesto': '15' }]
-                                                               Donde nro y puesto son datos utilizados por la plantilla. 
-                                               Sugiero que usemos JSON para poder transportar estructuras a los exhibidores (que van a usar JS para trabajar).                                  
-                POST     /exhibidores/publicar
-                Parámetros: 
-                               - canal: URI del canal
-                               - data: JSON con la estructura a enviar al exhibidor.
+  POST     /exhibidores/plantilla
+  Parámetros:
+  	- idTemplate: Identificador del nuevo template a utilizar
+		- canal: Canal donde se renovarán las plantillas.
+	Todos los exhibidores subscriptos a dicho canal recargarán a la nueva plantilla
+
+- broadcast: Se envía un mensaje a publicar en un canal determinado. La información enviada es un array (JS) con la
+	información necesaria requerida por el template en cuestión.
+	Ej.:
+  	[data: { 'nro': '2', 'puesto': '15' }]
+    Donde nro y puesto son datos utilizados por la plantilla.
+    Sugiero que usemos JSON para poder transportar estructuras a los exhibidores (que van a usar JS para trabajar).
+	POST     /exhibidores/publicar
+  Parámetros:
+  	- canal: URI del canal
+    - data: JSON con la estructura a enviar al exhibidor.
 
